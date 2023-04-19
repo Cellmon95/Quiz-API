@@ -14,5 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return 'hej';
 });
+
+Route::get('users/{msg}', function ($msg) {
+    return response()->json(['msg' => $msg]);
+});
+
+Route::get('/register', 'AuthenticationController@register');
