@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,6 +20,7 @@ class DatabaseSeeder extends Seeder
             'id' => 1,
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'api_token' => Str::random(60),
         ]);
 
         DB::table('games')->insert([
@@ -30,9 +32,40 @@ class DatabaseSeeder extends Seeder
 
         DB::table('questions')->insert([
             [
-                'id' => 1,
                 'the_question' => 'Är det blått?',
                 'alt_1' => 'Det är blått',
+                'alt_2' => 'ja',
+                'alt_3' => 'nej',
+                'alt_4' => 'kanske',
+                'the_answer' => 4
+            ],
+            [
+                'the_question' => 'Är det blött?',
+                'alt_1' => 'Det är blött',
+                'alt_2' => 'ja',
+                'alt_3' => 'nej',
+                'alt_4' => 'kanske',
+                'the_answer' => 4
+            ],
+            [
+                'the_question' => 'Är det blekt?',
+                'alt_1' => 'Det är blekt',
+                'alt_2' => 'ja',
+                'alt_3' => 'nej',
+                'alt_4' => 'kanske',
+                'the_answer' => 4
+            ],
+            [
+                'the_question' => 'Är det blankt?',
+                'alt_1' => 'Det är blankt',
+                'alt_2' => 'ja',
+                'alt_3' => 'nej',
+                'alt_4' => 'kanske',
+                'the_answer' => 4
+            ],
+            [
+                'the_question' => 'Är det bläck?',
+                'alt_1' => 'Det är bläck',
                 'alt_2' => 'ja',
                 'alt_3' => 'nej',
                 'alt_4' => 'kanske',

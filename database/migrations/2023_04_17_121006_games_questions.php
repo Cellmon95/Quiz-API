@@ -16,8 +16,8 @@ return new class extends Migration
             $table->timestamps();
             $table->foreignId('question_id')->constrained();
             $table->foreignId('game_id')->constrained();
-            $table->string('result', 20);
-            $table->boolean('is_current');
+            $table->string('result', 20)->default('undecided');
+            $table->boolean('is_current')->default(false);
         });
     }
 
