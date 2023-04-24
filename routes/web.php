@@ -12,13 +12,3 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', function () {
-    return 'hej';
-});
-
-Route::get('users/{msg}', function ($msg) {
-    return response()->json(['msg' => $msg]);
-});
-
-Route::get('/register', 'AuthenticationController@register');

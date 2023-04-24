@@ -27,4 +27,5 @@ Route::post('/games', [GameController::class, 'createGame']);
 
 Route::post('register', [AuthenticationController::class, 'register']);
 Route::post('login', [AuthenticationController::class, 'login']);
+Route::post('postAnswer', [GameController::class, 'postAnswer']);
 

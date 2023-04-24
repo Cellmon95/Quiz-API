@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Games;
 use App\Models\Question;
+use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class GameController extends Controller
 {
+
     function createGame(Request $request) {
         $numberOfQuestions = (int) $request->NOQ;
 
@@ -21,7 +24,7 @@ class GameController extends Controller
         if ($numberOfQuestions <= 0) {
             return ['msg' => 'Too few questions'];
         }
-        
+
         try {
             $game = new Games;
             $game->user_id = DB::table('users')->where('api_token', $request->api_token)->pluck('id')[0];
@@ -68,4 +71,79 @@ class GameController extends Controller
 
         return response()->json($response);
     }
+
+    function postAnswer(Request $request)
+    {
+        $user = User::where('api_token', $request->api_token)->first();
+
+        if($user === null){
+            return ['error', 'No user with that api_token.'];
+        }
+
+        $currentGame = Games::where('user_id', $user->id)->first();
+
+        $currentQuestionId = DB::table('games_questions')
+        ->select('question_id')
+        ->where('game_id', $currentGame->id)
+        ->where('is_current', true)->first()->question_id;
+
+        $currentQuestion = Question::where('id', $currentQuestionId)->first();
+
+        $gamesQuestionsIds = DB::table('games_questions')
+        ->where('game_id', $currentGame->id)
+        ->orderByDesc('id')->get();
+
+        if ($currentQuestion->the_answer == $request->answer) {
+
+            DB::table('games_questions')
+            ->where('game_id', $currentGame->id)
+            ->where('question_id', $currentQuestion->id)
+            ->update(['result' => 'correct', 'is_current' => false]);
+
+            $result = $this->iterateIsCurrent($currentQuestionId, $gamesQuestionsIds, $currentGame);
+
+            //check if game is done
+            if ($result) {
+                return ['result' => true, 'gameDone' => true];
+            }
+            else{
+                return ['result' => true, 'gameDone' => false];
+            }
+
+            return ['result' => true];
+        }
+
+        DB::table('games_questions')
+        ->where('game_id', $currentGame->id)
+        ->where('question_id', $currentQuestion->id)
+        ->update(['result' => 'incorrect', 'is_current' => false]);
+
+        $result = $this->iterateIsCurrent($currentQuestionId, $gamesQuestionsIds, $currentGame);
+
+        //check if game is done
+        if ($result) {
+            return ['result' => false, 'gameDone' => true];
+        }
+        else{
+            return ['result' => false, 'gameDone' => false];
+        }
+    }
+
+    private function iterateIsCurrent($currentQuestionId, $gamesQuestionsIds, $currentGame)
+    {
+        $currentQuestionId++;
+        if ($currentQuestionId > sizeof($gamesQuestionsIds)) {
+            return true;
+        }
+        else{
+            DB::table('games_questions')
+            ->where('game_id', $currentGame->id)
+            ->where('question_id', $currentQuestionId)
+            ->update(['is_current' => true]);
+
+            return false;
+        }
+    }
+
+
 }
