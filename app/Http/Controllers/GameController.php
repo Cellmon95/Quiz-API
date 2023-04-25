@@ -27,7 +27,7 @@ class GameController extends Controller
 
         try {
             $game = new Games;
-            $game->user_id = DB::table('users')->where('api_token', $request->api_token)->pluck('id')[0];
+            $game->user_id = DB::table('users')->where('api_token', $request->api_key)->pluck('id')[0];
             $game->save();
         } catch (Exception $e) {
             return ['msg' => 'Invalid API-Key'];
