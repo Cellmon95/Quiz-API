@@ -14,7 +14,7 @@ class CreateGameTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_creates_game(): void
+    public function test_creates_game_returns_game_id(): void
     {
 
         DB::table('questions')->insert([
@@ -58,7 +58,7 @@ class CreateGameTest extends TestCase
         $response->assertStatus(200)->assertJson(['game_id' => '1']);
     }
 
-    public function test_creates_game_return_msg_if_too_many_questions(): void
+    public function test_return_msg_if_too_many_questions(): void
     {
 
         $apiKey = $this->post('/api/register', [
@@ -75,7 +75,7 @@ class CreateGameTest extends TestCase
         $response->assertStatus(200)->assertJson(['msg' => 'Too many questions']);
     }
 
-    public function test_creates_game_return_msg_if_too_few_questions(): void
+    public function test_return_msg_if_too_few_questions(): void
     {
 
         $apiKey = $this->post('/api/register', [
@@ -92,7 +92,7 @@ class CreateGameTest extends TestCase
         $response->assertStatus(200)->assertJson(['msg' => 'Too few questions']);
     }
 
-    public function test_creates_game_returns_msg_if_invalid_api_key(): void
+    public function test_returns_msg_if_invalid_api_key(): void
     {
 
         DB::table('questions')->insert([
