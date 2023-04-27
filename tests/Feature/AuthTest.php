@@ -32,7 +32,7 @@ class AuthTest extends TestCase
             'password' => '123'
         ]);
 
-        $response->assertStatus(302);
+        $response->assertStatus(401);
         $response->assertJson([
             'msg' => 'login failed. Wrong username or password.'
         ]);
@@ -45,11 +45,11 @@ class AuthTest extends TestCase
 
     public function test_login_existing_user(): void{
 
-        $user = new User();
-        $user->name = 'John Doe';
-        $user->email = 'test@yrgo.se';
-        $user->password = 'test';
-        $user->save();
+        $this->post('/api/register', [
+            'name' => 'John Doe',
+            'email' => 'test@yrgo.se',
+            'password' => 'test'
+        ]);
 
         $response = $this->post('/api/login', [
             'name' => 'John Doe',
