@@ -36,6 +36,6 @@ class AuthenticationController extends Controller
             return response()->json(['api_key' => $user->api_token]);
         }
 
-        return response()->json(['msg' => 'login failed. Wrong username or password.'], 302);
+        return response()->json(['msg' => 'login failed. Wrong username or password.'], 401);
     }
 }

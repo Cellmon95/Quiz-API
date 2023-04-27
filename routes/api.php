@@ -31,4 +31,3 @@ Route::post('postAnswer', [GameController::class, 'postAnswer']);
 Route::get('brew_coffee', function() {
     return response('', 418);
 });
-

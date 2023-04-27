@@ -5,9 +5,11 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\User;
 
 class AuthTest extends TestCase
 {
+    use RefreshDatabase;
     public function test_register(): void{
         $response = $this->post('/api/register', [
             'name' => 'John Doe',
@@ -42,6 +44,13 @@ class AuthTest extends TestCase
     }
 
     public function test_login_existing_user(): void{
+
+        $user = new User();
+        $user->name = 'John Doe';
+        $user->email = 'test@yrgo.se';
+        $user->password = 'test';
+        $user->save();
+
         $response = $this->post('/api/login', [
             'name' => 'John Doe',
             'password' => 'test'
