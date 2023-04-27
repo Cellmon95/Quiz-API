@@ -80,12 +80,23 @@ class GameController extends Controller
             return ['error', 'No user with that api_token.'];
         }
 
-        $currentGame = Games::where('user_id', $user->id)->first();
+        $currentGame = Games::where('user_id', $user->id)
+        ->where('id', $request->game_id)->first();
 
-        $currentQuestionId = DB::table('games_questions')
+        if ($currentGame == null) {
+            return response(['msg' => 'Can\'t find game with that id.'], 401);
+        }
+
+        $currentGameQuestion = DB::table('games_questions')
         ->select('question_id')
         ->where('game_id', $currentGame->id)
-        ->where('is_current', true)->first()->question_id;
+        ->where('is_current', true)->first();
+
+        if ($currentGameQuestion == null) {
+            return response(['msg' => 'The game is done'], 400);
+        }
+
+        $currentQuestionId = $currentGameQuestion->question_id;
 
         $currentQuestion = Question::where('id', $currentQuestionId)->first();
 
@@ -104,7 +115,11 @@ class GameController extends Controller
 
             //check if game is done
             if ($result) {
-                return ['result' => true, 'gameDone' => true];
+                $sumResult = DB::table('games_questions')
+                ->where('game_id', $currentGame->id)
+                ->select('result')->get();
+
+                return ['result' => true, 'gameDone' => true, 'sumRes' => $sumResult];
             }
             else{
                 return ['result' => true, 'gameDone' => false];
@@ -122,7 +137,11 @@ class GameController extends Controller
 
         //check if game is done
         if ($result) {
-            return ['result' => false, 'gameDone' => true];
+            $sumResult = DB::table('games_questions')
+            ->where('game_id', $currentGame->id)
+            ->select('result')->get();
+
+            return ['result' => false, 'gameDone' => true, 'sumRes' => $sumResult];
         }
         else{
             return ['result' => false, 'gameDone' => false];
