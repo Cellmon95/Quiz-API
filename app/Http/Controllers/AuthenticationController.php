@@ -20,7 +20,7 @@ class AuthenticationController extends Controller
         $user->api_token = Str::random(60);
         $user->save();
 
-        return response()->json(['api_key' => $user->api_token]);
+        return response()->json(['api_key' => $user->api_token], 201);
     }
 
     public function login(Request $request)
