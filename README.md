@@ -68,8 +68,9 @@ gameDone - true if the game is done or false if not.
 
 ### /brewCoffe
 #### description
-Attempt to brew coffe
+Attempt to brew coffee
 #### return
 ##### status Code
-418
+418  
+You can't brew coffee in a teapot:smile:
 
