@@ -66,7 +66,7 @@ result - either true if the answer was correct or false if the answer was incorr
 gameDone - true if the game is done or false if not.
 
 
-### /brewCoffe
+### /brewCoffee
 #### description
 Attempt to brew coffee
 #### return
